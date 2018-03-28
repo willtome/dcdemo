@@ -1,0 +1,11 @@
+---
+# Documentation for requirements.yml can be found here
+# http://docs.ansible.com/ansible/latest/galaxy.html#installing-multiple-roles-from-a-file
+
+# Ansible Network Engine
+- src: https://github.com/ansible-network/network-engine.git
+  version: cf21ceaa068b023ca1c76949c540f62226c3ef6e
+
+# Ansible Network CLI
+- src: https://github.com/ansible-network/network-cli.git
+  version: c4d24d5b4b7f453ae6c4472261f3f61901075458

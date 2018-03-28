@@ -1,0 +1,69 @@
+---
+- name: match sections
+  pattern_match:
+    regex: "^-------------------------"
+    match_all: yes
+    match_greedy: yes
+  register: context
+
+- name: match cdp info
+  block:
+    - name: match device id
+      pattern_match:
+        regex: "Device ID:(?P<device_id>.+)"
+        contents: "{{ item }}"
+      register: device_id
+
+    - name: match local port
+      pattern_match:
+        regex: "Interface:.(?P<local_port>.+),"
+        contents: "{{ item }}"
+      register: local_port
+
+    - name: match remote port
+      pattern_match:
+        regex: "Port ID \\(outgoing port\\): (?P<remote_port>.+)"
+        contents: "{{ item }}"
+      register: remote_port
+
+    - name: match mgmt IP address
+      pattern_match:
+        regex: "(Mgmt|Management) address\\(es\\):\\s.+(IPv4|IP) (A|a)ddress: (?P<mgmt_ip>.+)"
+        contents: "{{ item }}"
+      register: mgmt_ip
+
+  loop: "{{ context }}"
+  register: devices
+
+- name: template list
+  json_template:
+    template:
+      - key: remote_device
+        value: "{{ item.device_id.device_id }}"
+      - key: local_port
+        value: "{{ item.local_port.local_port }}"
+      - key: remote_port
+        value: "{{ item.remote_port.remote_port }}"
+      - key: mgmt_ip
+        value: "{{ item.mgmt_ip.mgmt_ip }}"
+
+  register: cdp_list
+  loop: "{{ devices }}"
+
+- name: template hash
+  json_template:
+    template:
+      - key: "{{ item.device_id.device_id }}"
+        object:
+        - key: local_port
+          value: "{{ item.local_port.local_port }}"
+        - key: remote_port
+          value: "{{ item.remote_port.remote_port }}"
+
+  register: cdp_hash
+  loop: "{{ devices }}"
+
+- name: set fact
+  export_facts:
+    neighbors_list: "{{ cdp_list }}"
+    neighbors_hash: "{{ cdp_hash }}"

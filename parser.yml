@@ -1,0 +1,36 @@
+---
+- hosts: all
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - nxos_command:
+        commands:
+          - show cdp neighbors detail
+          - show run interface
+      register: show_commands
+
+    - include_role:
+        name: network-cli
+        tasks_from: parse
+      vars:
+        filename: ./files/cdp_parser.yml
+        contents: "{{ show_commands.stdout.0 }}"
+
+    - debug: var=neighbors_list
+
+    - include_role:
+        name: network-cli
+        tasks_from: parse
+      vars:
+        filename: ./files/int_parser.yml
+        contents: "{{ show_commands.stdout.1 }}"
+
+    - debug: var=interfaces_hash
+
+    - set_fact:
+        interconnects : "{{ interconnects | default({}) | combine({item.local_port : interfaces_hash[item.local_port] | combine({'neighbor' : item.remote_device | regex_replace('\\(.+', '')})}) }}"
+      with_items: "{{ neighbors_list }}"
+      when: item.local_port in interfaces_hash.keys()
+
+    - debug: var=interconnects

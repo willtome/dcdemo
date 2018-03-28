@@ -1,0 +1,49 @@
+---
+- name: match sections
+  pattern_match:
+    regex: "interface Ethernet.+"
+    match_all: yes
+    match_greedy: yes
+  register: context
+
+- name: match interface info
+  block:
+    - name: match interface name
+      pattern_match:
+        regex: "interface\\s(?P<match>Ethernet.+)"
+        contents: "{{ item }}"
+      register: name
+
+    - name: match description
+      pattern_match:
+        regex: "description\\s(?P<match>.+)"
+        contents: "{{ item }}"
+      register: description
+
+    - name: match lines
+      pattern_match:
+        regex: "(?P<lines>.+)"
+        match_greedy: yes
+        contents: "{{ item }}"
+      register: lines
+
+  loop: "{{ context }}"
+  register: parsed_interfaces
+
+- name: build dictionary
+  loop: "{{ parsed_interfaces }}"
+  export_as: dict
+  export: yes
+  register: interfaces_formatted
+  json_template:
+    template:
+      - key: "{{ item.name.match }}"
+        object:
+        - key: description
+          value: "{{ item.description.match }}"
+        - key: lines
+          value: "{{ item.lines.0 }}"
+
+- name: set fact
+  export_facts:
+    interfaces: "{{ interfaces_formatted }}"
