@@ -1,7 +1,6 @@
 ---
 - nxos_command:
     commands: "show running-config interface {{interface}}"
-    interval: 10
   register: config_before
 
 - name: Before State
@@ -20,7 +19,6 @@
 
 - nxos_command:
     commands: "show running-config interface {{interface}}"
-    interval: 10
   register: config_after
 
 - name: After State
