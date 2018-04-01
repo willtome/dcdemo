@@ -1,0 +1,31 @@
+---
+- hosts: all
+  connection: local
+  gather_facts: no
+
+  tasks:
+  - nxos_command:
+      commands: "show running-config interface {{interface}}"
+    register: config_before
+
+  - name: Before State
+    debug:
+      msg: "{{ config_before.stdout_lines }}"
+
+  - nxos_config:
+      before: "interface interface {{ interface }}"
+      lines:
+        - description default trunk
+        - siwtchport mode trunk
+        - no shut
+      parents: "interface {{ interface }}"
+      match: none
+      save_when: always
+
+  - nxos_command:
+      commands: "show running-config interface {{interface}}"
+    register: config_after
+
+  - name: After State
+    debug:
+      msg: "{{ config_after.stdout_lines }}"
