@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: leaf:spine:edge
   connection: local
   gather_facts: no
 
@@ -7,3 +7,6 @@
   - include_role:
       name: netops
       tasks_from: default_trunk
+    vars:
+      interface: "{{ item }}"
+    with_items: "{{ pod_interconnects.keys() }}"
