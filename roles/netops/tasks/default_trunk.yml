@@ -8,8 +8,8 @@
     msg: "{{ config_before.stdout_lines }}"
 
 - nxos_config:
-    before: "default interface {{ interface }}"
     lines:
+      - default interface {{ interface }}
       - description default trunk
       - switchport
       - switchport mode trunk
