@@ -47,14 +47,10 @@
       vars:
         filename: ./parser/int_config.yml
         contents: "{{ lookup('file', './tests/'+inventory_hostname+'-1.txt') }}"
-      tags:
-        - offline
-        - int
+      tags: debug
 
     - debug: var=interfaces
-      tags:
-        - debug
-        - int
+      tags: debug
 
     - set_fact:
         pod_interconnects : "{{ pod_interconnects | default({}) | combine({item.local_port : interfaces[item.local_port] | combine({'neighbor' : item.remote_device | regex_replace('\\(.+', '')})}) }}"
@@ -65,9 +61,7 @@
         - online
 
     - debug: var=pod_interconnects
-      tags:
-        - debug
-        - offline
+      tags: debug
 
     - include_role:
         name: tower-api
@@ -75,4 +69,6 @@
       vars:
         update_vars: "{'pod_interconnects' : {{pod_interconnects}} }"
       delegate_to: localhost
-      tags: offline
+      tags:
+        - offline
+        - online
