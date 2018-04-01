@@ -16,7 +16,7 @@
       before: "interface interface {{ interface }}"
       lines:
         - description default trunk
-        - siwtchport mode trunk
+        - switchport mode trunk
         - no shut
       parents: "interface {{ interface }}"
       match: none
