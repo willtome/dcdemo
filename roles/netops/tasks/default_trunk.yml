@@ -16,6 +16,7 @@
       - no shut
     parents: "interface {{ interface }}"
     match: none
+    timeout: 60
 
 - nxos_command:
     commands: "show running-config interface {{interface}}"
