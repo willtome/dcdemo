@@ -12,10 +12,13 @@
     debug:
       msg: "{{ config_before.stdout_lines }}"
 
+  - nxos_command:
+      commands: "default interface {{ interface }}"
+
   - nxos_config:
-      before: "default interface {{ interface }}"
       lines:
         - description default trunk
+        - switchport
         - switchport mode trunk
         - no shut
       parents: "interface {{ interface }}"
