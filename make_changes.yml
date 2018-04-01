@@ -8,5 +8,5 @@
       lines: "{{ pod_interconnects[item].lines.split('\n') }}"
       parents: "interface {{item}}"
       save_when: modified
-      diff_against: startup
+      diff_against: running
     with_items: "{{ pod_interconnects.keys() }}"
