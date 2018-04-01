@@ -16,7 +16,6 @@
       - no shut
     parents: "interface {{ interface }}"
     match: none
-    save_when: always
 
 - nxos_command:
     commands: "show running-config interface {{interface}}"
