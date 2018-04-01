@@ -1,0 +1,20 @@
+---
+- include_tasks: get-token.yml
+  when: tower_api_token is not defined
+
+- include_tasks: get-hosts.yml
+  when: tower_api_token is defined
+
+- name: Update Host
+  uri:
+    url: "https://{{tower_api_host}}/api/v2/hosts/{{inventory_hosts[inventory_hostname]['id']}}/"
+    method: PATCH
+    validate_certs: "{{ tower_api_validate_certs }}"
+    body:
+      name: "{{ inventory_hostname }}"
+      inventory: "{{tower_api_inventory_id}}"
+      variables: "{{ inventory_hosts[inventory_hostname]['vars'] | default({})| combine(update_vars) | to_json}}"
+    body_format: json
+    headers:
+      Authorization: "Token {{tower_api_token}}"
+      Content-Type: "application/json"

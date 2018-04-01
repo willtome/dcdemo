@@ -7,7 +7,7 @@
   register: context
 
 - name: match cdp info
-  block:
+  pattern_group:
     - name: match device id
       pattern_match:
         regex: "Device ID:(?P<device_id>.+)"

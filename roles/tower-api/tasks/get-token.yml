@@ -1,0 +1,14 @@
+---
+- name: Get Authentication Token
+  uri:
+    url: "https://{{tower_api_host}}/api/v2/authtoken/"
+    method: POST
+    body: "{{ {'username': tower_api_username, 'password': tower_api_password } | to_json }}"
+    validate_certs: "{{ tower_api_validate_certs }}"
+    headers:
+      Content-Type: "application/json"
+  register: token_out
+
+- name: set authtoken
+  set_fact:
+   tower_api_token: "{{token_out.json.token}}"

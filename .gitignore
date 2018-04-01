@@ -1,0 +1,8 @@
+.vagrant
+Vagrantfile
+tower_cli.cfg
+tower_inventory.yml
+.DS_Store
+roles/network-cli
+roles/network-engine
+tests

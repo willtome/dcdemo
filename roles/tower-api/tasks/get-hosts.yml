@@ -1,0 +1,50 @@
+---
+- block:
+  - name: All Hosts
+    uri:
+      url: "https://{{tower_api_host}}/api/v2/inventories/{{tower_api_inventory_id}}/hosts/"
+      method: GET
+      validate_certs: "{{ tower_api_validate_certs }}"
+      headers:
+        Authorization: "Token {{tower_api_token}}"
+    register: hosts_out
+    run_once: yes
+
+  - name: All Hosts - set_fact if variables are not empty
+    set_fact:
+     inventory_hosts: "{{ inventory_hosts | default({})| combine({ item.name : { 'id' : item.id, 'vars' : item.variables | from_yaml } }) }}"
+    with_items: "{{hosts_out.json.results}}"
+    when: item.variables != ""
+    no_log: yes
+
+  - name: All Hosts - set_fact if variables are empty
+    set_fact:
+     inventory_hosts: "{{ inventory_hosts | default({})| combine({ item.name : { 'id' : item.id } }) }}"
+    with_items: "{{hosts_out.json.results}}"
+    when: item.variables == ""
+    no_log: yes
+  when: tower_api_host_id is not defined
+
+- block:
+  - name: Get Host
+    uri:
+      url: "https://{{tower_api_host}}/api/v2/hosts/{{tower_api_host_id}}/"
+      method: GET
+      validate_certs: "{{ tower_api_validate_certs }}"
+      headers:
+        Authorization: "Token {{tower_api_token}}"
+    register: host_out
+
+  - name: Get Host - set_fact if variables are not empty
+    set_fact:
+     inventory_hosts: "{{ inventory_hosts | default({})| combine({  host_out.json.name : { 'id' :  host_out.json.id, 'vars' :  host_out.json.variables | from_yaml } }) }}"
+    when: host_out.json.variables != ""
+    no_log: yes
+
+  - name: Get Host - set_fact if variables are empty
+    set_fact:
+     inventory_hosts: "{{ inventory_hosts | default({})| combine({ host_out.json.name : { 'id' : host_out.json.id } }) }}"
+    with_items: "{{hosts_out.json.results}}"
+    when: host_out.json.variables == ""
+    no_log: yes
+  when: tower_api_host_id is defined

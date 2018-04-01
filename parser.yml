@@ -3,34 +3,76 @@
   connection: local
   gather_facts: no
 
+  vars:
+    inventory: dcdemo
+
   tasks:
     - nxos_command:
         commands:
           - show cdp neighbors detail
           - show run interface
       register: show_commands
+      tags: online
 
     - include_role:
         name: network-cli
         tasks_from: parse
       vars:
-        filename: ./files/cdp_parser.yml
+        filename: ./parser/cdp_neighbors.yml
         contents: "{{ show_commands.stdout.0 }}"
+      tags: online
+
+    - include_role:
+        name: network-cli
+        tasks_from: parse
+      vars:
+        filename: ./parser/cdp_neighbors.yml
+        contents: "{{ lookup('file', './tests/'+inventory_hostname+'-0.txt') }}"
+      tags: offline
 
     - debug: var=neighbors_list
+      tags: debug
 
     - include_role:
         name: network-cli
         tasks_from: parse
       vars:
-        filename: ./files/int_parser.yml
+        filename: ./parser/int_config.yml
         contents: "{{ show_commands.stdout.1 }}"
+      tags: online
 
-    - debug: var=interfaces_hash
+    - include_role:
+        name: network-cli
+        tasks_from: parse
+      vars:
+        filename: ./parser/int_config.yml
+        contents: "{{ lookup('file', './tests/'+inventory_hostname+'-1.txt') }}"
+      tags:
+        - offline
+        - int
+
+    - debug: var=interfaces
+      tags:
+        - debug
+        - int
 
     - set_fact:
-        interconnects : "{{ interconnects | default({}) | combine({item.local_port : interfaces_hash[item.local_port] | combine({'neighbor' : item.remote_device | regex_replace('\\(.+', '')})}) }}"
+        pod_interconnects : "{{ pod_interconnects | default({}) | combine({item.local_port : interfaces[item.local_port] | combine({'neighbor' : item.remote_device | regex_replace('\\(.+', '')})}) }}"
       with_items: "{{ neighbors_list }}"
-      when: item.local_port in interfaces_hash.keys()
+      when: item.local_port in interfaces.keys()
+      tags:
+        - offline
+        - online
 
-    - debug: var=interconnects
+    - debug: var=pod_interconnects
+      tags:
+        - debug
+        - offline
+
+    - include_role:
+        name: tower-api
+        tasks_from: update-vars
+      vars:
+        update_vars: "{'pod_interconnects' : {{pod_interconnects}} }"
+      delegate_to: localhost
+      tags: offline
