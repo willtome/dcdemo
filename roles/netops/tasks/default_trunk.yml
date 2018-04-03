@@ -16,7 +16,6 @@
       - no shut
     parents: "interface {{ interface }}"
     match: none
-    transport: nxapi
     timeout: 120
 
 - nxos_command:
