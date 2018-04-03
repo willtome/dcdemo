@@ -1,7 +1,7 @@
 ---
 - nxos_command:
     commands: "show running-config interface {{interface}}"
-    provider: “{{ connection | combine({'timeout': 400}) }}”
+    provider: "{{ connection | combine({'timeout': 400}) }}"
   register: config_before
 
 - name: Before State
@@ -17,11 +17,11 @@
       - no shut
     parents: "interface {{ interface }}"
     match: none
-    provider: “{{ connection | combine({'timeout': 400}) }}”
+    provider: "{{ connection | combine({'timeout': 400}) }}"
 
 - nxos_command:
     commands: "show running-config interface {{interface}}"
-    provider: “{{ connection | combine({'timeout': 400}) }}”
+    provider: "{{ connection | combine({'timeout': 400}) }}"
   register: config_after
 
 - name: After State
