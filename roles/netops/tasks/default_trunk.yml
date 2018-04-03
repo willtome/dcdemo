@@ -5,7 +5,7 @@
       timeout: 400
   register: config_before
 
-- name: Before State
+- name: "Before State {{ interface }}"
   debug:
     msg: "{{ config_before.stdout_lines }}"
 
@@ -27,6 +27,6 @@
       timeout: 400
   register: config_after
 
-- name: After State
+- name: "After State {{ interface }}"
   debug:
     msg: "{{ config_after.stdout_lines }}"
