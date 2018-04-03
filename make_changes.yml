@@ -9,4 +9,6 @@
       parents: "interface {{item}}"
       save_when: modified
       diff_against: running
+      provider:
+        timeout: 400
     with_items: "{{ pod_interconnects.keys() }}"
