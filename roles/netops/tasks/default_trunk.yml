@@ -15,7 +15,7 @@
       - description default trunk
       - switchport
       - switchport mode trunk
-      - swtichport trunk allowed vlan none
+      - switchport trunk allowed vlan none
       - no shut
     parents: "interface {{ interface }}"
     match: none
