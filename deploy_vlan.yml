@@ -1,0 +1,13 @@
+---
+- hosts: leaf:spine:edge
+  connection: local
+  gather_facts: no
+
+  tasks:
+  - include_role:
+      name: netops
+      tasks_from: vlan_deploy
+    vars:
+      interface: "{{ item }}"
+      vlan_id: 10
+    with_items: "{{ pod_interconnects.keys() }}"

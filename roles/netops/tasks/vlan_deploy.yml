@@ -1,0 +1,23 @@
+---
+- name: "configure vlan {{vlan_id}}"
+  nxos_vlan:
+    vlan_id: "{{ vlan_id }}"
+    description: "{{ vlan_db[vlan_id]['description']}}"
+    provider:
+      timeout: 400
+  when: vlan_db is defined
+
+- name: "configure vlan {{vlan_id}}"
+  nxos_vlan:
+    vlan_id: "{{ vlan_id }}"
+    provider:
+      timeout: 400
+  when: vlan_db is not defined
+
+- name: "add vlan {{ vlan_id }} to {{ interface }}"
+  nxos_config:
+    lines:
+      - "switchport trunk allowed vlan add {{ vlan_id}}"
+    parents: "interface {{ interface }}"
+    provider:
+      timeout: 400
