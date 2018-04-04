@@ -1,0 +1,19 @@
+---
+- name: "configure vlan {{vlan_id}}"
+  nxos_vlan:
+    vlan_id: "{{ vlan_id }}"
+    provider:
+      timeout: 400
+
+- name: "access {{ vlan_id }} on {{ interface }}"
+  nxos_config:
+    before: "default interface {{ interface }}"
+    lines:
+      - description Access Port
+      - switchport
+      - switchport mode access
+      - “switchport access vlan {{ vlan_id }}”
+    parents: "interface {{ interface }}"
+    provider:
+      timeout: 400
+  when: interface not in pod_interconnects.keys()
