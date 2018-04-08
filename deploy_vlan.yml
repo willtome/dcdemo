@@ -9,5 +9,6 @@
       tasks_from: vlan_deploy
     vars:
       interface: "{{ item }}"
-      vlan_id: 10
+      vlan_id: "{{ vlan_id }}"
+      vlan_description: "{{ vlan_description }}"
     with_items: "{{ pod_interconnects.keys() }}"
