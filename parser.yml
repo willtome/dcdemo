@@ -86,3 +86,14 @@
       tags:
         - offline
         - online
+
+    - include_role:
+        name: tower-api
+        tasks_from: update-vars
+      vars:
+        update_vars: "{'active_interfaces' : {{active_interfaces}} } " #| combine({'active_interfaces' : {{active_interfaces}} })"
+      delegate_to: localhost
+      when: active_interfaces is defined
+      tags:
+        - offline
+        - online
