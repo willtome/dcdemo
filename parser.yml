@@ -8,7 +8,8 @@
 
   tasks:
     - set_fact:
-        tower_api_inventory_id: "{{ lookup('env', 'INVENTORY_ID' )}}"
+        tower_api_inventory_id: "{{ lookup('env', 'INVENTORY_ID') }}"
+      tags: online
 
     - nxos_command:
         commands:
