@@ -1,12 +1,15 @@
 ---
-- hosts: all
+- hosts: leaf:spine:edge
   connection: local
   gather_facts: no
 
-  vars:
-    inventory: dcdemo
+  #vars:
+  #  inventory: dcdemo
 
   tasks:
+    - set_fact:
+        tower_api_inventory_id: {{ lookup('env', 'INVENTORY_ID' )}}
+
     - nxos_command:
         commands:
           - show cdp neighbors detail
