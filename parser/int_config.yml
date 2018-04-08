@@ -1,7 +1,7 @@
 ---
 - name: match sections
   pattern_match:
-    regex: "interface .+"
+    regex: "interface Ethernet|loopback.+"
     match_all: yes
     match_greedy: yes
   register: context
