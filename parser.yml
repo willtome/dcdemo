@@ -65,7 +65,7 @@
       tags: debug
 
     - set_fact:
-        active_interfaces: "{{ active_interfaces | default({}) | combine(item) }}"
+        active_interfaces: "{{ active_interfaces | default({}) | combine({item : interfaces[item]}) }}"
       with_items: "{{ interfaces }}"
       when:
         - item not in pod_interconnects.keys()
