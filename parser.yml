@@ -9,7 +9,6 @@
   tasks:
     - set_fact:
         tower_api_inventory_id: "{{ lookup('env', 'INVENTORY_ID') }}"
-      run_once: yes
       tags: online
 
     - nxos_command:
