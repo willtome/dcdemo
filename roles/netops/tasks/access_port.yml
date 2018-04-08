@@ -1,14 +1,10 @@
 ---
-- name: "configure vlan {{vlan_id}}"
-  nxos_vlan:
-    vlan_id: "{{ vlan_id }}"
-    provider:
-      timeout: 400
-
 - nxos_facts:
-    gather_subset:
-      - 'vlan_list'
 
+- assert:
+    that: "vlan_id in ansible_facts.vlan_list"
+  msg: "VLAN does not exist. Please deploy first"
+  
 - name: "access VLAN {{ vlan_id }} on {{ interface }}"
   nxos_config:
     before: "default interface {{ interface }}"
