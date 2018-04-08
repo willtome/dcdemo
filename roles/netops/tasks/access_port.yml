@@ -9,7 +9,7 @@
   nxos_config:
     before: "default interface {{ interface }}"
     lines:
-      - description Access Port
+      - "description {{ port_description }}"
       - switchport
       - switchport mode access
       - “switchport access vlan {{ vlan_id }}”

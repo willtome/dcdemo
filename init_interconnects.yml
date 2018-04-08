@@ -6,7 +6,7 @@
   tasks:
   - include_role:
       name: netops
-      tasks_from: default_trunk
+      tasks_from: init_trunk
     vars:
       interface: "{{ item }}"
     with_items: "{{ pod_interconnects.keys() }}"
