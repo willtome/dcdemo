@@ -82,7 +82,7 @@
         name: tower-api
         tasks_from: update-vars
       vars:
-        update_vars: "{'pod_interconnects' : {{pod_interconnects}} } " #| combine({'active_interfaces' : {{active_interfaces}} })"
+        update_vars: "{'pod_interconnects' : {{pod_interconnects}} } "
       delegate_to: localhost
       tags:
         - offline
@@ -92,7 +92,7 @@
         name: tower-api
         tasks_from: update-vars
       vars:
-        update_vars: "{'active_interfaces' : {{active_interfaces}} } " #| combine({'active_interfaces' : {{active_interfaces}} })"
+        update_vars: "{'active_interfaces' : {{active_interfaces}} } "
       delegate_to: localhost
       when: active_interfaces is defined
       tags:
