@@ -6,7 +6,8 @@
       timeout: 400
 
 - nxos_facts:
-    gather_subset: vlan_list
+    gather_subset:
+      - vlan_list
 
 - name: "access VLAN {{ vlan_id }} on {{ interface }}"
   nxos_config:
