@@ -58,7 +58,6 @@
       with_items: "{{ neighbors_list }}"
       when:
         - item.local_port in interfaces.keys()
-        - item.local_port != 'mgmt0'
       tags:
         - offline
         - online
