@@ -69,7 +69,7 @@
       with_items: "{{ interfaces }}"
       when:
         - item not in pod_interconnects.keys()
-        - interfaces[item].lines is not match("^shutdown.+")
+        - interfaces[item].lines is match("^shutdown.+")
       tags:
         - offline
         - online
