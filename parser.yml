@@ -68,8 +68,8 @@
     - debug: var=pod_interconnects
       tags: debug
 
-   - set_fact:
-       active_interfaces: "{{ default({}) }}"
+    - set_fact:
+        active_interfaces: "{{ default({}) }}"
 
     - set_fact:
         active_interfaces: "{{ active_interfaces | default({}) | combine({item : interfaces[item]}) }}"
