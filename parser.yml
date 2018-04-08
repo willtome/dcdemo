@@ -48,7 +48,7 @@
       vars:
         filename: ./parser/int_config.yml
         contents: "{{ lookup('file', './tests/'+inventory_hostname+'-1.txt') }}"
-      tags: debug
+      tags: offline
 
     - debug: var=interfaces
       tags: debug
