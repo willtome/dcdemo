@@ -5,6 +5,10 @@
 - include_tasks: get-hosts.yml
   when: tower_api_token is defined
 
+- set_fact:
+    tower_api_host_id: "{{ inventory_hosts[inventory_hostname]['id'] }}"
+  cacheable: yes
+
 - name: Update Host
   uri:
     url: "https://{{tower_api_host}}/api/v2/hosts/{{inventory_hosts[inventory_hostname]['id']}}/"
