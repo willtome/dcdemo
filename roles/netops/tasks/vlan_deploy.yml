@@ -2,7 +2,7 @@
 - name: "configure vlan {{vlan_id}} from db"
   nxos_vlan:
     vlan_id: "{{ vlan_id }}"
-    description: "{{ vlan_db[vlan_id]['description']}}"
+    name: "{{ vlan_db[vlan_id]['description']}}"
     provider:
       timeout: 400
   when: vlan_db is defined
@@ -10,7 +10,7 @@
 - name: "configure vlan {{vlan_id}} from id"
   nxos_vlan:
     vlan_id: "{{ vlan_id }}"
-    description: "{{ vlan_description }}"
+    name: "{{ vlan_description }}"
     provider:
       timeout: 400
   when: vlan_db is not defined
