@@ -54,7 +54,10 @@
       tags: debug
 
     - set_fact:
-        pod_interconnects : "{{ pod_interconnects | default({}) | combine({item.local_port : interfaces[item.local_port] | combine({'neighbor' : item.remote_device | regex_replace('\\(.+', '')})}) }}"
+        pod_interconnects: "{{ default({}) }}"
+
+    - set_fact:
+        pod_interconnects : "{{ pod_interconnects | combine({item.local_port : interfaces[item.local_port] | combine({'neighbor' : item.remote_device | regex_replace('\\(.+', '')})}) }}"
       with_items: "{{ neighbors_list }}"
       when:
         - item.local_port in interfaces.keys()
@@ -64,6 +67,9 @@
 
     - debug: var=pod_interconnects
       tags: debug
+
+   - set_fact:
+       active_interfaces: "{{ default({}) }}"
 
     - set_fact:
         active_interfaces: "{{ active_interfaces | default({}) | combine({item : interfaces[item]}) }}"
