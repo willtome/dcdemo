@@ -64,6 +64,19 @@
     - debug: var=pod_interconnects
       tags: debug
 
+    - set_fact:
+        active_interfaces: "{{ active_interfaces | default({}) | combine(item) }}"
+      with_items: "{{ interfaces }}"
+      when:
+        - item not in pod_interconnects.keys()
+        - item.lines.0 != 'shutdown'
+      tags:
+        - offline
+        - online
+
+    - debug: var=active_interfaces
+      tags: debug
+
     - include_role:
         name: tower-api
         tasks_from: update-vars
