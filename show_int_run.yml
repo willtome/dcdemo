@@ -1,0 +1,14 @@
+---
+- hosts: leaf:spine:edge
+  connection: local
+  gather_facts: no
+
+  tasks:
+  - nxos_command:
+      commands: "show run interface {{ interface}}"
+      provider:
+        timeout: 400
+    register: show_output
+
+  - debug:
+      msg: "{{show_output.stdout_lines.0}}"
