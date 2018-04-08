@@ -71,6 +71,7 @@
       when:
         - item not in pod_interconnects.keys()
         - interfaces[item].lines is not search('^shutdown')
+        - item != 'null'
       tags:
         - offline
         - online
