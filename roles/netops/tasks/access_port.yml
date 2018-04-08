@@ -5,7 +5,7 @@
     provider:
       timeout: 400
 
-- name: "access {{ vlan_id }} on {{ interface }}"
+- name: "access VLAN {{ vlan_id }} on {{ interface }}"
   nxos_config:
     before: "default interface {{ interface }}"
     lines:
