@@ -10,7 +10,7 @@
   pattern_group:
     - name: match interface name
       pattern_match:
-        regex: "interface\\s(?P<match>Ethernet.+)"
+        regex: "interface\\s(?P<match>.+)"
         contents: "{{ item }}"
       register: name
 
