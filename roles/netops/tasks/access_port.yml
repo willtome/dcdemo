@@ -7,7 +7,7 @@
 
 - nxos_facts:
     gather_subset:
-      - vlan_list
+      - 'vlan_list'
 
 - name: "access VLAN {{ vlan_id }} on {{ interface }}"
   nxos_config:
