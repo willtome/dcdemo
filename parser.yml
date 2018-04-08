@@ -81,7 +81,7 @@
         name: tower-api
         tasks_from: update-vars
       vars:
-        update_vars: "{'pod_interconnects' : {{pod_interconnects}} }"
+        update_vars: "{'pod_interconnects' : {{pod_interconnects}, 'active_interfaces' : {{active_interfaces}} } }"
       delegate_to: localhost
       tags:
         - offline
