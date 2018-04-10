@@ -12,6 +12,8 @@
         commands:
           - show cdp neighbors detail
           - show run interface
+        provider:
+          timeout: 400
       register: show_commands
       tags: online
 
