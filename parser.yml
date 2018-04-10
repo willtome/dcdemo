@@ -57,7 +57,7 @@
         pod_interconnects: "{{ default({}) }}"
 
     - set_fact:
-        pod_interconnects : "{{ pod_interconnects | default({}) | combine({item.local_port : interfaces[item.local_port] | combine({'neighbor' : item.remote_device | regex_replace('\\(.+', '')})}) }}"
+        new_pod_interconnects : "{{ new_pod_interconnects | default({}) | combine({item.local_port : interfaces[item.local_port] | combine({'neighbor' : item.remote_device | regex_replace('\\(.+', '')})}) }}"
       with_items: "{{ neighbors_list }}"
       when:
         - item.local_port in interfaces.keys()
@@ -72,7 +72,7 @@
         active_interfaces: "{{ default({}) }}"
 
     - set_fact:
-        active_interfaces: "{{ active_interfaces | default({}) | combine({item : interfaces[item]}) }}"
+        new_active_interfaces: "{{ new_active_interfaces | default({}) | combine({item : interfaces[item]}) }}"
       with_items: "{{ interfaces }}"
       when:
         - item not in pod_interconnects.keys()
@@ -89,7 +89,7 @@
         name: tower-api
         tasks_from: update-vars
       vars:
-        update_vars: "{'pod_interconnects' : {{pod_interconnects}} } "
+        update_vars: "{'pod_interconnects' : {{new_pod_interconnects}} } "
       delegate_to: localhost
       tags:
         - offline
@@ -99,7 +99,7 @@
         name: tower-api
         tasks_from: update-vars
       vars:
-        update_vars: "{'active_interfaces' : {{active_interfaces}} } "
+        update_vars: "{'active_interfaces' : {{new_active_interfaces}} } "
       delegate_to: localhost
       when: active_interfaces is defined
       tags:

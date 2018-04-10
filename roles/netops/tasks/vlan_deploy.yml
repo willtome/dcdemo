@@ -1,19 +1,10 @@
 ---
-- name: "configure vlan {{vlan_id}} from db"
-  nxos_vlan:
-    vlan_id: "{{ vlan_id }}"
-    name: "{{ vlan_db[vlan_id]['description']}}"
-    provider:
-      timeout: 400
-  when: vlan_db is defined
-
 - name: "configure vlan {{vlan_id}} from id"
   nxos_vlan:
     vlan_id: "{{ vlan_id }}"
     name: "{{ vlan_description }}"
     provider:
       timeout: 400
-  when: vlan_db is not defined
 
 - name: "add vlan {{ vlan_id }} to {{ interface }}"
   nxos_config:
