@@ -54,9 +54,6 @@
       tags: debug
 
     - set_fact:
-        pod_interconnects: "{{ default({}) }}"
-
-    - set_fact:
         new_pod_interconnects : "{{ new_pod_interconnects | default({}) | combine({item.local_port : interfaces[item.local_port] | combine({'neighbor' : item.remote_device | regex_replace('\\(.+', '')})}) }}"
       with_items: "{{ neighbors_list }}"
       when:
@@ -67,9 +64,6 @@
 
     - debug: var=pod_interconnects
       tags: debug
-
-    - set_fact:
-        active_interfaces: "{{ default({}) }}"
 
     - set_fact:
         new_active_interfaces: "{{ new_active_interfaces | default({}) | combine({item : interfaces[item]}) }}"
@@ -94,6 +88,7 @@
       tags:
         - offline
         - online
+      when: new_pod_interconnects is defined
 
     - include_role:
         name: tower-api
@@ -101,7 +96,7 @@
       vars:
         update_vars: "{'active_interfaces' : {{new_active_interfaces}} } "
       delegate_to: localhost
-      when: active_interfaces is defined
+      when: new_active_interfaces is defined
       tags:
         - offline
         - online
