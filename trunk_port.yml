@@ -1,0 +1,10 @@
+---
+- hosts: all
+  connection: local
+  gather_facts: no
+
+  tasks:
+  - name: initialize trunk port
+    include_role:
+      name: netops
+      tasks_from: trunk_port

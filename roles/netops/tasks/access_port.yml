@@ -1,7 +1,8 @@
 ---
 - nxos_facts:
 
-- assert:
+- name: Check for VLAN
+  assert:
     that: "vlan_id in vlan_list"
     msg: "VLAN does not exist. Please deploy first"
 
@@ -13,6 +14,7 @@
       - switchport
       - switchport mode access
       - “switchport access vlan {{ vlan_id }}”
+      - no shutdown
     parents: "interface {{ interface }}"
     provider:
       timeout: 400

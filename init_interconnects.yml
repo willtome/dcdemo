@@ -4,9 +4,10 @@
   gather_facts: no
 
   tasks:
-  - include_role:
+  - name: initialize interconnect ports
+    include_role:
       name: netops
-      tasks_from: init_trunk
+      tasks_from: trunk_port
     vars:
       interface: "{{ item }}"
     with_items: "{{ pod_interconnects.keys() }}"

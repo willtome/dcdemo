@@ -4,7 +4,8 @@
   gather_facts: no
 
   tasks:
-  - nxos_config:
+  - name: Push Changes to Interconnects
+    nxos_config:
       lines: "{{ pod_interconnects[item].lines.split('\n') }}"
       parents: "interface {{item}}"
       save_when: modified
@@ -12,3 +13,15 @@
       provider:
         timeout: 400
     with_items: "{{ pod_interconnects.keys() }}"
+    when: pod_interconnects is defined
+
+  - name: Push Changes to Active Interfaces
+    nxos_config:
+      lines: "{{ active_interfaces[item].lines.split('\n') }}"
+      parents: "interface {{item}}"
+      save_when: modified
+      diff_against: running
+      provider:
+        timeout: 400
+    with_items: "{{ active_interfaces.keys() }}"
+    when: active_interfaces is defined

@@ -6,4 +6,4 @@
   tasks:
   - include_role:
       name: netops
-      tasks_from: init_trunk
+      tasks_from: shut_port

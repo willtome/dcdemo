@@ -1,5 +1,6 @@
 ---
-- nxos_command:
+- name: "show running-config interface {{interface}}"
+  nxos_command:
     commands: "show running-config interface {{interface}}"
     provider:
       timeout: 400
@@ -9,20 +10,22 @@
   debug:
     msg: "{{ config_before.stdout_lines }}"
 
-- nxos_config:
+- name: "default and configure {{ interface }} as a trunk "
+  nxos_config:
     before: "default interface {{ interface }}"
     lines:
       - description default trunk
       - switchport
       - switchport mode trunk
       - switchport trunk allowed vlan none
-      - no shut
+      - no shutdown
     parents: "interface {{ interface }}"
     match: none
     provider:
       timeout: 400
 
-- nxos_command:
+- name: "show running-config interface {{interface}}"
+  nxos_command:
     commands: "show running-config interface {{interface}}"
     provider:
       timeout: 400
