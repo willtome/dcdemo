@@ -3,8 +3,10 @@
 # http://docs.ansible.com/ansible/latest/galaxy.html#installing-multiple-roles-from-a-file
 
 # Ansible Network Engine
-- src: https://github.com/ansible-network/network-engine.git
-  version: cf21ceaa068b023ca1c76949c540f62226c3ef6e
+#- src: https://github.com/ansible-network/network-engine.git
+#  version: cf21ceaa068b023ca1c76949c540f62226c3ef6e
+
+- name: ansible-network.network-engine
 
 # Ansible Network CLI
 - src: https://github.com/ansible-network/network-cli.git

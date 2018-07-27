@@ -16,12 +16,11 @@
       tags: online
 
     - include_role:
-        name: network-cli
+        name: ansible-network.network-engine
         tasks_from: parse
       vars:
         filename: ./parser/cdp_neighbors.yml
         contents: "{{ show_commands.stdout.0 }}"
-      delegate_to: localhost
       tags: online
 
     - include_role:
