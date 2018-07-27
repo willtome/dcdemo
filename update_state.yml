@@ -12,8 +12,6 @@
         commands:
           - show cdp neighbors detail
           - show run interface
-        provider:
-          timeout: 400
       register: show_commands
       tags: online
 
@@ -23,6 +21,7 @@
       vars:
         filename: ./parser/cdp_neighbors.yml
         contents: "{{ show_commands.stdout.0 }}"
+      delegate_to: localhost
       tags: online
 
     - include_role:
@@ -42,6 +41,7 @@
       vars:
         filename: ./parser/int_config.yml
         contents: "{{ show_commands.stdout.1 }}"
+      delegate_to: localhost
       tags: online
 
     - include_role:
