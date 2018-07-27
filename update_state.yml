@@ -17,7 +17,7 @@
 
     - include_role:
         name: ansible-network.network-engine
-        tasks_from: parse
+        tasks_from: command_parser
       vars:
         filename: ./parser/cdp_neighbors.yml
         contents: "{{ show_commands.stdout.0 }}"
